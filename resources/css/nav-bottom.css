@@ -1,0 +1,105 @@
+/* =========================================
+   1. CONTAINER (Fixed at Bottom)
+   ========================================= */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border-top: 1px solid #e5e7eb; /* Light gray line */
+    z-index: 50; /* Sit on top */
+}
+
+.bottom-nav-inner {
+    display: flex;
+    height: 5rem; /* Height of the bar */
+    padding-bottom: 0.5rem; /* Space for gesture bar */
+}
+
+/* =========================================
+   2. THE BUTTON (Layout + Size)
+   ========================================= */
+.nav-btn {
+    /* Layout: Take up equal space, center items */
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    /* Reset defaults */
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+
+    /* Transition */
+    transition: color 0.2s ease;
+}
+
+/* =========================================
+   3. COLORS (Active vs Inactive)
+   ========================================= */
+
+/* ACTIVE STATE (Green) */
+.nav-btn.active {
+    color: #059669; /* Emerald 600 */
+}
+/* Show the green dot only when active */
+.nav-btn.active .nav-dot {
+    display: block;
+}
+
+/* INACTIVE STATE (Gray) */
+.nav-btn.inactive {
+    color: #9ca3af; /* Gray 400 */
+}
+/* Turn green on hover */
+.nav-btn.inactive:hover {
+    color: #10b981; /* Emerald 500 */
+}
+
+/* =========================================
+   4. ICONS & TEXT (Styling)
+   ========================================= */
+
+/* Icon Wrapper */
+.nav-icon {
+    position: relative;
+    padding: 4px;
+}
+
+/* SVG Styling (Size and Scale) */
+.nav-icon svg {
+    width: 28px;
+    height: 28px;
+    transition: transform 0.2s;
+}
+
+/* Scale icon on hover */
+.nav-btn:hover .nav-icon svg {
+    transform: scale(1.1);
+}
+
+/* Text Label */
+.nav-label {
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+/* The Green Dot */
+.nav-dot {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background-color: #10b981;
+    border-radius: 50%;
+    display: none; /* Hidden by default */
+}
+
