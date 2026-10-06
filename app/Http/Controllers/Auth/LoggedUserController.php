@@ -6,14 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Native\Mobile\Facades\System;
 
 class LoggedUserController extends Controller
 {
-
     public function store(Request $request)
     {
-
         $validated = $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
@@ -21,7 +18,15 @@ class LoggedUserController extends Controller
 
         if (Auth::attempt($validated)) {
             $request->session()->regenerate();
-            return redirect('/dashboard');
+
+            $user = Auth::user();
+
+            // 🚀 Route users based on their assigned Spatie role
+            if ($user->hasRole('student')) {
+                return redirect('/student');
+            } elseif ($user->hasRole('driver')) {
+                return redirect('/driver');
+            }
         }
 
         return back()->withErrors([
@@ -52,10 +57,15 @@ class LoggedUserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Log the user out and send them back to the login screen.
      */
-    public function destroy(User $user)
+    public function destroy(Request $request)
     {
-        //
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }

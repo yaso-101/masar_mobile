@@ -1,7 +1,8 @@
 @import 'tailwindcss';
 @import 'nav-bottom.css' layer(components);
 @import 'form.css' layer(components);
-@import 'map-ride.css' layer(components);
+@import 'map-driver.css' layer(components);
+
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';

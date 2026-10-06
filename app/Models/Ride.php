@@ -18,21 +18,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 ])]
 class Ride extends Model
 {
+    use HasFactory;
 
-use HasFactory;
-
+    /**
+     * Get the student who requested this ride.
+     */
     public function student(): BelongsTo
     {
         return $this->belongsTo(User::class, 'student_id');
     }
 
+    /**
+     * 🚀 ADDED: Get the driver assigned to this ride.
+     */
+    public function driver(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'driver_id');
+    }
 
-
-    protected $guarded = [];
-
-    // ... your other relationships (student, driver) ...
-
-    public function college()
+    /**
+     * Get the college for this ride.
+     */
+    public function college(): BelongsTo
     {
         // The second parameter tells Laravel exactly which column to look at!
         return $this->belongsTo(College::class, 'ending_point_college_id');

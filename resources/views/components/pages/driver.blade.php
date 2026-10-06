@@ -7,9 +7,25 @@
                 <p class="text-slate-500 mt-2">Select your destination and available seats to find passengers.</p>
             </div>
 
+            @if (session('error'))
+                <div class="mb-4 p-4 rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if (session('success'))
+                <div class="mb-4 p-4 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-700 text-sm">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <form action="/driver/assign-student" method="POST"
                 class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                 @csrf
+
+                <!-- Hidden inputs to store the driver's exact GPS location -->
+                <input type="hidden" name="driver_lat" id="driver_lat">
+                <input type="hidden" name="driver_long" id="driver_long">
 
                 <div class="mb-6">
                     <label for="college_id" class="block text-slate-700 text-sm font-bold mb-2">
@@ -63,18 +79,55 @@
                     </div>
                 </div>
 
-                <button type="submit"
-                    class="w-full flex items-center justify-center gap-2 bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-slate-900 active:scale-[0.98] transition-all">
+                <!-- Submit button is disabled by default until JS finds their location -->
+                <button type="submit" id="submit-ride-btn" disabled
+                    class="w-full flex items-center justify-center gap-2 bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-slate-900 active:scale-[0.98] transition-all opacity-50 cursor-not-allowed">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
-                    Find Passengers
+                    <span id="btn-text">Finding Location...</span>
                 </button>
 
             </form>
         </div>
     </div>
 
+    <!-- Script to automatically fetch GPS coordinates -->
+    <script>
+        const submitBtn = document.getElementById('submit-ride-btn');
+        const btnText = document.getElementById('btn-text');
+
+        // As soon as the page loads, try to find the driver's location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    // Success! Fill the hidden inputs with the exact coordinates
+                    document.getElementById('driver_lat').value = position.coords.latitude;
+                    document.getElementById('driver_long').value = position.coords.longitude;
+
+                    // Unlock the submit button and change the text
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    btnText.innerText = 'Find Passengers';
+                },
+                function(error) {
+                    // They denied location access, or it failed
+                    alert("Please enable location services so we can match you with the closest student.");
+
+                    // Unlock the button anyway so they can still use the fallback (first-come, first-served) method
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    btnText.innerText = 'Find Passengers (Without GPS)';
+                }
+            );
+        } else {
+            // Browser doesn't support GPS, just unlock the button
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            btnText.innerText = 'Find Passengers';
+        }
+    </script>
 </x-layout>
+    

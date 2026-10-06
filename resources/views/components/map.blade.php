@@ -45,6 +45,10 @@
                 <!-- Hidden Inputs -->
                 <input type="hidden" id="pickup_lat" name="pickup_lat">
                 <input type="hidden" id="pickup_long" name="pickup_long">
+
+                @error('pickup_lat')
+                    <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                @enderror
             </div>
 
             <!-- ============================================== -->

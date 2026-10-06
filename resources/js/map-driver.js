@@ -7,15 +7,18 @@ let marker;
 function initMap() {
     if (!map) {
         // Default view
-        map = L.map('map').setView([20, 0], 2);
+        map = L.map("map").setView([20, 0], 2);
 
         // OpenStreetMap Tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+        // New CartoDB Voyager Tiles
+        // Replace whatever tileLayer you currently have with this exact snippet:
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 19,
+    attribution: 'Tiles &copy; Esri'
+}).addTo(map);
 
         // Click on map to place marker
-        map.on('click', function(e) {
+        map.on("click", function (e) {
             placeMarker(e.latlng);
         });
     }
@@ -27,14 +30,14 @@ function initMap() {
 }
 
 // 1. Open Map (Inline)
-window.openMap = function() {
-    document.getElementById('ride-map-container').classList.add('active');
+window.openMap = function () {
+    document.getElementById("ride-map-container").classList.add("active");
     initMap();
 };
 
 // 2. Close Map (Inline)
-window.closeMap = function() {
-    document.getElementById('ride-map-container').classList.remove('active');
+window.closeMap = function () {
+    document.getElementById("ride-map-container").classList.remove("active");
 };
 
 // 3. Place Marker Logic
@@ -45,15 +48,15 @@ function placeMarker(latlng) {
     marker = L.marker(latlng).addTo(map);
 
     // Update hidden inputs
-    const latInput = document.getElementById('pickup_lat');
-    const lngInput = document.getElementById('pickup_long');
+    const latInput = document.getElementById("pickup_lat");
+    const lngInput = document.getElementById("pickup_long");
 
     if (latInput) latInput.value = latlng.lat;
     if (lngInput) lngInput.value = latlng.lng;
 }
 
 // 4. The "Precise Location" (GPS) Button
-window.locateUser = function() {
+window.locateUser = function () {
     if (!navigator.geolocation) {
         alert("Geolocation is not supported by your browser.");
         return;
@@ -73,20 +76,21 @@ window.locateUser = function() {
         },
         (error) => {
             let msg = "Unable to retrieve your location.";
-            if (error.code === 1) msg = "Permission denied. Please allow location access.";
+            if (error.code === 1)
+                msg = "Permission denied. Please allow location access.";
             alert(msg);
         },
         {
             enableHighAccuracy: true,
             timeout: 15000,
-            maximumAge: 0
-        }
+            maximumAge: 0,
+        },
     );
 };
 
 // 5. Confirm Location
-window.confirmLocation = function() {
-    const lat = document.getElementById('pickup_lat').value;
+window.confirmLocation = function () {
+    const lat = document.getElementById("pickup_lat").value;
 
     if (!lat) {
         alert("Please tap on the map to select a location first.");
@@ -94,7 +98,7 @@ window.confirmLocation = function() {
     }
 
     // Update UI
-    const btnText = document.getElementById('location-btn-text');
+    const btnText = document.getElementById("location-btn-text");
     if (btnText) {
         btnText.innerText = "Location Selected ✓";
         btnText.classList.add("text-emerald-600");

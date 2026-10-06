@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'app_id' => env('NATIVEPHP_APP_ID'),
+    'app_id' => 'com.masar.masarmobile',
 
     /*
     |--------------------------------------------------------------------------

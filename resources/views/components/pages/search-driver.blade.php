@@ -1,4 +1,5 @@
 <x-layout>
+    <div id="ride-data" data-ride-id="{{ $ride->id }}" class="hidden"></div>
     <div class="min-h-screen bg-emerald-50 flex flex-col items-center justify-center p-4">
 
         <div class="relative flex items-center justify-center w-40 h-40 mb-10">

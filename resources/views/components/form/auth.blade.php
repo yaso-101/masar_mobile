@@ -33,6 +33,16 @@
 
             @include('components.form.register')
 
+            @if ($errors->register->any())
+                <!-- Sign up failed validation: reopen the Sign Up tab with the role they picked -->
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        switchAuth('signup');
+                        selectRole(@json(old('role', 'student')));
+                    });
+                </script>
+            @endif
+
         </div>
 
         <!-- Footer Text -->

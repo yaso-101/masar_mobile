@@ -11,8 +11,10 @@
     "require": {
         "php": "^8.3",
         "laravel/framework": "^13.8",
+        "laravel/reverb": "^1.0",
         "laravel/tinker": "^3.0",
-        "nativephp/mobile": "^3.3",
+        "nativephp/mobile": "^4.2",
+        "spatie/laravel-permission": "^8.3",
         "stevebauman/location": "^7.6"
     },
     "require-dev": {

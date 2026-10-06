@@ -26,15 +26,9 @@ window.switchAuth = function (mode) {
 };
 
 window.selectRole = function (roleString) {
-    // Mapping based on your Seeder order: Student(1), Driver(2), Guardian(3)
-    const roleMap = {
-        student: 1,
-        driver: 2,
-        guardian: 3,
-    };
-
-    // Update the hidden input with the Database ID
-    document.getElementById("role-input").value = roleMap[roleString];
+    // We no longer need the integer mapping!
+    // Just pass the string directly into the hidden input for Spatie.
+    document.getElementById("role-input").value = roleString;
 
     // Update Visual Styling
     const buttons = document.querySelectorAll(".role-btn");
@@ -44,8 +38,4 @@ window.selectRole = function (roleString) {
     if (activeBtn) {
         activeBtn.classList.add("active");
     }
-
-
 };
-
-

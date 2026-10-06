@@ -2,26 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\Role;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role; // 🚀 Use Spatie's Role model instead!
 
 class RoleSeeder extends Seeder
 {
     public function run(): void
     {
-        // Checks if roles exist to prevent duplicates
-        if (Role::query()->exists()) {
-            return;
-        }
-
-        $roles = [
-            ['name' => 'Student', 'slug' => 'student'],
-            ['name' => 'Driver', 'slug' => 'driver'],
-            ['name' => 'Guardian', 'slug' => 'guardian'],
-        ];
-
-        foreach ($roles as $role) {
-            Role::create($role);
-        }
+        // firstOrCreate ensures it doesn't duplicate if they already exist
+        Role::firstOrCreate(['name' => 'student']);
+        Role::firstOrCreate(['name' => 'driver']);
+        Role::firstOrCreate(['name' => 'guardian']);
     }
 }

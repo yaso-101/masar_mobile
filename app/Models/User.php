@@ -7,18 +7,20 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany; // Added for the relationship
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Role;
-use App\Models\Ride; // Added to reference the Ride model
+use Spatie\Permission\Traits\HasRoles; // 1. Added Spatie
+use App\Models\Ride;
 
-#[Fillable(['name', 'email', 'password', 'role_id'])]
+// 2. Removed 'role_id' from Fillable since Spatie manages roles in a separate table
+#[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles; // 3. Added HasRoles trait here
 
     /**
      * Get the attributes that should be cast.
@@ -33,25 +35,12 @@ class User extends Authenticatable
         ];
     }
 
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
-
     /**
      * Get the rides associated with this user (if they are a student).
      */
     public function ridesAsStudent(): HasMany
     {
         return $this->hasMany(Ride::class, 'student_id');
-    }
-
-    /**
-     * Check if the user is a student.
-     */
-    public function isStudent(): bool
-    {
-        return $this->role_id === 1;
     }
 
     /**
@@ -63,12 +52,18 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if the user is a driver.
+     * The user's FIB subscription (phone number + paid flag).
      */
-    public function isDriver(): bool
+    public function subscription(): HasOne
     {
-        // Assuming your driver role ID is 2 in your database!
-        // Change the 2 if your database uses a different ID for drivers.
-        return $this->role_id === 2;
+        return $this->hasOne(Subscription::class);
+    }
+
+    /**
+     * Has someone confirmed this user's FIB payment?
+     */
+    public function hasPaidSubscription(): bool
+    {
+        return (bool) $this->subscription?->is_paid;
     }
 }

@@ -2,8 +2,8 @@
     <form action="/register" method="POST">
         @csrf
 
-        <!-- UPDATED: Changed name to 'role_id' and value to '1' (Student ID) -->
-        <input type="hidden" id="role-input" name="role_id" value="1">
+        <!-- UPDATED: Changed name to 'role' and value to 'student' -->
+        <input type="hidden" id="role-input" name="role" value="{{ old('role', 'student') }}">
 
         <!-- ROLE SELECTOR -->
         <div class="role-selector">
@@ -41,23 +41,47 @@
             </div>
 
         </div>
+        @error('role', 'register')
+            <span class="form-error mb-4">{{ $message }}</span>
+        @enderror
 
         <!-- Name -->
         <div class="form-group">
             <label class="form-label">Full Name</label>
-            <input type="text" class="form-input" name="name" placeholder="Your Name" required>
+            <input type="text" class="form-input" name="name" value="{{ old('name') }}" placeholder="Your Name"
+                required>
+            @error('name', 'register')
+                <span class="form-error">{{ $message }}</span>
+            @enderror
         </div>
 
         <!-- Email -->
         <div class="form-group">
             <label class="form-label">Email Address</label>
-            <input type="email" class="form-input" name="email" placeholder="you@example.com" required>
+            <input type="email" class="form-input" name="email" value="{{ old('email') }}"
+                placeholder="you@example.com" required>
+            @error('email', 'register')
+                <span class="form-error">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <!-- Phone Number (the FIB number this user will pay the subscription from) -->
+        <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input type="tel" class="form-input" name="phone_number" value="{{ old('phone_number') }}"
+                placeholder="07XX XXX XXXX" inputmode="tel" autocomplete="tel" dir="ltr" required>
+            @error('phone_number', 'register')
+                <span class="form-error">{{ $message }}</span>
+            @enderror
         </div>
 
         <!-- Password -->
         <div class="form-group">
             <label class="form-label">Password</label>
             <input type="password" class="form-input" name="password" placeholder="Create a password" required>
+            @error('password', 'register')
+                <span class="form-error">{{ $message }}</span>
+            @enderror
         </div>
 
         <!-- Submit Button -->
