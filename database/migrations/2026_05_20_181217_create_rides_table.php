@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('rides', function (Blueprint $table) {
             $table->id();
             $table->foreignId('student_id')->constrained('users');
-            $table->foreignId('driver_id')->constrained('users');
+            $table->foreignId('driver_id')->nullable()->constrained('users');
             $table->decimal('pickup_lat', 10, 8);
             $table->decimal('pickup_long', 11, 8);
             $table->foreignId('ending_point_college_id')->constrained('colleges');

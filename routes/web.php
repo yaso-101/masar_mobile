@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoggedUserController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +17,13 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::view('/dashboard', 'dashboard');
     Route::get('/student', [StudentController::class, 'Allcolleges']);
-    ROute::post('/studentfirst', [StudentController::class, 'storeStudentFirst']);
-    Route::view('/driver', 'components.pages.driver');
+    Route::post('/studentfirst', [StudentController::class, 'storeStudentFirst']);
+    Route::get('/driver', [DriverController::class, 'Allcolleges']);
+    Route::post('/driver/assign-student', [DriverController::class, 'matchWithStudent']);
+    Route::view('/search-driver', 'components.pages.search-driver');
 
+    // The Tracking & Ride Action Routes
+    Route::get('/track/{id}', [DriverController::class, 'trackRide']);
+    Route::post('/driver/pickup/{id}', [DriverController::class, 'pickupStudent']); // <-- Added Pickup!
+    Route::post('/driver/dropoff', [DriverController::class, 'dropoffStudent']);
 });

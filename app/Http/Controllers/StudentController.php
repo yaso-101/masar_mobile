@@ -30,14 +30,14 @@ class StudentController extends Controller
         // The pure Model method for inserting data, pulling directly from the request
         Ride::create([
             'student_id' => Auth::id(),
-            'driver_id' => 1,
+            'driver_id' => null,
             'ending_point_college_id' => $request->college_id,
             'pickup_lat' => $request->pickup_lat,
             'pickup_long' => $request->pickup_long,
             'status' => 'pending'
         ]);
 
-        return redirect('/dashboard');
+        return redirect('/search-driver');
     }
 
 

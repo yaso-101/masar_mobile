@@ -53,4 +53,22 @@ class User extends Authenticatable
     {
         return $this->role_id === 1;
     }
+
+    /**
+     * Get the rides associated with this user (if they are a driver).
+     */
+    public function ridesAsDriver(): HasMany
+    {
+        return $this->hasMany(Ride::class, 'driver_id');
+    }
+
+    /**
+     * Check if the user is a driver.
+     */
+    public function isDriver(): bool
+    {
+        // Assuming your driver role ID is 2 in your database!
+        // Change the 2 if your database uses a different ID for drivers.
+        return $this->role_id === 2;
+    }
 }
